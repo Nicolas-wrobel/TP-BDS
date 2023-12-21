@@ -5,6 +5,7 @@
         <input type="text" placeholder="Username" v-model="username" />
         <input type="password" placeholder="Password" v-model="password" />
         <button type="submit">Login</button>
+        <button @click="$router.push('/signup')">S'inscrire</button>
       </form>
     </div>
   </template>
@@ -21,7 +22,7 @@
     },
     methods: {
         login() {
-            axios.get(`http://localhost:3000/login/${this.username}/${this.password}`)
+            axios.get(`http://127.0.0.1:3000/login/${this.username}/${this.password}`)
             .then(response => {
             if (response.data) {
                 localStorage.setItem('isAuthenticated', 'true');

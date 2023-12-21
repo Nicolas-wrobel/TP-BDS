@@ -1,16 +1,18 @@
 import mongoose from "mongoose";
+import cors from 'cors';
 import express, { json, request, response } from "express";
 
 const app = express();
 
+app.use(cors())
 app.use(json())
 
-mongoose.connect("mongodb://localhost:27017/BDS").then((e) => {
+mongoose.connect("mongodb://127.0.0.1:27017/BDS").then((e) => {
   console.log("Connected")
 })
 .catch((e) => {
-  console.log("failed")
-})
+  console.log("Failed to connect to MongoDB", e);
+});
 
 
 const memberSchema = new mongoose.Schema({
