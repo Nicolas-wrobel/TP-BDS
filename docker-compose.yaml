@@ -1,6 +1,8 @@
 version: "3.2"
 services:
 
+
+
   # rs-sh1
   rs-sh1-01:
     image: mongo:4.4.4
@@ -32,54 +34,22 @@ services:
     ports:
     - 27013:27013
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--port", "27013", "--replSet", "rs-sh1", "--shardsvr" ]
+  
+  backend:
+    build: ./API
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rs-sh1-01
 
-  # rs-config
-  rs-config-01:
-    image: mongo:4.4.4
-    container_name: rs-config-01
-    volumes:
-      - rs-config-01:/data/configdb
-    expose:
-    - 27017
+  frontend:
+    build: ./Web/front-bds
     ports:
-      - 27017:27017
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--port", "27017", "--replSet", "rs-config", "--configsvr" ]
-  rs-config-02:
-    image: mongo:4.4.4
-    container_name: rs-config-02
-    volumes:
-      - rs-config-02:/data/configdb
-    expose:
-    - 27018
-    ports:
-    - 27018:27018
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--port", "27018", "--replSet", "rs-config", "--configsvr" ]
-  rs-config-03:
-    image: mongo:4.4.4
-    container_name: rs-config-03
-    volumes:
-      - rs-config-03:/data/configdb
-    expose:
-    - 27019
-    ports:
-    - 27019:27019
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--port", "27019", "--replSet", "rs-config", "--configsvr" ]
-
-  # rs-mongos
-  rs-mongos:
-    image: mongo:4.4.4
-    container_name: rs-mongos
-    expose:
-    - 27020
-    ports:
-      - 27020:27020
-    entrypoint: [ "/usr/bin/mongos", "--bind_ip_all", "--port", "27020", "--configdb", "rs-config/rs-config-01:27017,rs-config-02:27018,rs-config-03:27019" ]
-
+      - "5173:5173"
+    depends_on:
+    - backend
+    
 volumes:
   rs-sh1-01:
   rs-sh1-02:
   rs-sh1-03:
-
-  rs-config-01:
-  rs-config-02:
-  rs-config-03:
