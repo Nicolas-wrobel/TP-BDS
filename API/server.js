@@ -34,7 +34,7 @@ const memberSchema = new mongoose.Schema({
 const Membre = mongoose.model('Membre', memberSchema);
 
 const groupSchema = new mongoose.Schema({
-  numéro: String,
+  numero: String,
   nom: String,
   ville: String,
   membre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Membre' }],
@@ -95,7 +95,7 @@ app.get("/login/:name/:pwd", (request, response) => {
     })
 })
 
-app.post("addMemberToGroup/:id", (request, response) => {
+app.post("/addMemberToGroup/:id", (request, response) => {
   Groupe.findById(request.params.id).then((group) => {
       group.membre.push(request.body);
       Groupe.findByIdAndUpdate(request.params.id, group);
@@ -103,23 +103,24 @@ app.post("addMemberToGroup/:id", (request, response) => {
   )
 })
 
-app.post("group", (request, response) => {
+app.post("/group", (request, response) => {
+  console.log(request.body)
   const groupToSave = new Groupe(request.body);
   groupToSave.save().then(response.json("Group added"));
 })
 
-app.get("groups", (request, response) => {
+app.get("/groups", (request, response) => {
   Groupe.find().then((groups) => {
     response.json(groups);
     })
 })
 
-app.post("material", (request, response) => {
+app.post("/material", (request, response) => {
   const materialToSave = new Materiel(request.body);
   materialToSave.save().then(response.json("Material added"));
 })
 
-app.get("memberBelongGroup/:id", async (request, response) => {
+app.get("/memberBelongGroup/:id", async (request, response) => {
   try {
     const memberId = req.params.id;
 
