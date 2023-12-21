@@ -4,6 +4,7 @@
       <add-to-group-component v-if="!isMember"></add-to-group-component>
       <create-member-component></create-member-component>
       <show-member-component></show-member-component>
+      <button @click="$router.push('/create-group')">Créer un Groupe</button>
     </div>
   </template>
   
