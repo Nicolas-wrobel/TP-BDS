@@ -2,7 +2,7 @@
     <div class="create-group-container">
       <h1>Créer un Groupe</h1>
       <form @submit.prevent="createGroup">
-        <input type="text" placeholder="Numéro" v-model="numéro">
+        <input type="text" placeholder="Numéro" v-model="numero">
         <input type="text" placeholder="Nom" v-model="nom">
         <input type="text" placeholder="Ville" v-model="ville">
         <input type="text" placeholder="Code Postal" v-model="CP">
@@ -17,7 +17,7 @@
   export default {
     data() {
       return {
-        numéro: '',
+        numero: '',
         nom: '',
         ville: '',
         CP: ''
@@ -26,7 +26,7 @@
     methods: {
       createGroup() {
         const groupData = {
-          numéro: this.numéro,
+          numero: this.numero,
           nom: this.nom,
           ville: this.ville,
           CP: this.CP,
