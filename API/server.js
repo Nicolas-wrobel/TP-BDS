@@ -108,6 +108,12 @@ app.post("group", (request, response) => {
   groupToSave.save().then(response.json("Group added"));
 })
 
+app.get("groups", (request, response) => {
+  Groupe.find().then((groups) => {
+    response.json(groups);
+    })
+})
+
 app.post("material", (request, response) => {
   const materialToSave = new Materiel(request.body);
   materialToSave.save().then(response.json("Material added"));
