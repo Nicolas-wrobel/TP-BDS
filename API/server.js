@@ -37,6 +37,7 @@ const groupSchema = new mongoose.Schema({
   numéro: String,
   nom: String,
   ville: String,
+  membre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Membre' }],
   CP: String
 });
 
@@ -92,6 +93,39 @@ app.get("/login/:name/:pwd", (request, response) => {
             return response.status(403).json({message: 'Sorry, bad credentials'})
         }
     })
+})
+
+app.post("addMemberToGroup/:id", (request, response) => {
+  Groupe.findById(request.params.id).then((group) => {
+      group.membre.push(request.body);
+      Groupe.findByIdAndUpdate(request.params.id, group);
+    }
+  )
+})
+
+app.post("group", (request, response) => {
+  const groupToSave = new Groupe(request.body);
+  groupToSave.save().then(response.json("Group added"));
+})
+
+app.post("material", (request, response) => {
+  const materialToSave = new Materiel(request.body);
+  materialToSave.save().then(response.json("Material added"));
+})
+
+app.get("memberBelongGroup/:id", async (request, response) => {
+  try {
+    const memberId = req.params.id;
+
+    const isMemberInGroup = await Groupe.findOne({ membre: memberId });
+    if (isMemberInGroup) {
+      response.json(isMemberInGroup);
+    } else {
+      response.json(false);
+    }
+  } catch (error) {
+    response.status(500).send("Erreur lors de la vérification de l'appartenance du membre");
+  }
 })
 
 app.get('/', (req, res) => {
