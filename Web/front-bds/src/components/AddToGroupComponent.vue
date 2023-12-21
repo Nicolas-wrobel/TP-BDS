@@ -13,8 +13,15 @@ export default {
   name: 'AddToGroupComponent',
   data() {
     return {
-      groups: [] // Ici, vous chargeriez les groupes existants.
+      groups: [] // Données des groupes
     }
+  },
+  mounted() {
+    // requête pour charger les groupes
+    axios.get('url_pour_charger_les_groupes')
+      .then(response => {
+        this.groups = response.data;
+      });
   }
 }
 </script>

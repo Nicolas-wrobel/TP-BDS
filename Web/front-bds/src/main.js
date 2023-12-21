@@ -1,32 +1,29 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
 import HomePage from './pages/HomePage.vue';
 import LoginPage from './pages/LoginPage.vue';
-
-Vue.use(VueRouter);
 
 const routes = [
   { path: '/login', component: LoginPage },
   { path: '/', component: HomePage },
 ];
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   routes
 });
 
+const app = createApp(App);
+
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = false;
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
     if (to.path !== '/login' && !isAuthenticated) {
       next('/login');
     } else {
       next();
     }
-  });
-  
+  });  
 
-new Vue({
-  router,
-  render: h => h(App),
-}).$mount('#app');
+app.use(router);
+app.mount('#app');
