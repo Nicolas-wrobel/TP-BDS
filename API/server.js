@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import cors from 'cors';
 import express, { json, request, response } from "express";
-import cors from 'cors';
 const app = express();
 
 app.use(cors())
@@ -94,14 +93,32 @@ app.get("/login/:name/:pwd", (request, response) => {
         }
     })
 })
+app.post("/addMemberToGroup/:id", async (request, response) => {
+  try {
+    const groupId = request.params.id;
+    const memberId = request.body.memberId;
 
-app.post("/addMemberToGroup/:id", (request, response) => {
-  Groupe.findById(request.params.id).then((group) => {
-      group.membre.push(request.body);
-      Groupe.findByIdAndUpdate(request.params.id, group);
+    const member = await Membre.findById(memberId);
+    if (!member) {
+      return response.status(404).json({ message: "Member not found" });
     }
-  )
-})
+
+    const updatedGroup = await Groupe.findByIdAndUpdate(
+      groupId, 
+      { $push: { membre: member._id } },
+      { new: true }
+    );
+
+    if (!updatedGroup) {
+      return response.status(404).json({ message: "Group not found" });
+    }
+
+    response.json(updatedGroup);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: "An error occurred" });
+  }
+});
 
 app.post("/group", (request, response) => {
   console.log(request.body)
@@ -122,7 +139,11 @@ app.post("/material", (request, response) => {
 
 app.get("/memberBelongGroup/:id", async (request, response) => {
   try {
+
     const memberId = request.params.id;
+    if (!mongoose.Types.ObjectId.isValid(memberId)) {
+      return response.status(400).json({ message: "Invalid member ID" });
+    }
 
     const isMemberInGroup = await Groupe.findOne({ membre: memberId });
     if (isMemberInGroup) {
@@ -131,7 +152,8 @@ app.get("/memberBelongGroup/:id", async (request, response) => {
       response.json(false);
     }
   } catch (error) {
-    response.status(500).send("Erreur lors de la vérification de l'appartenance du membre");
+    console.error(error);
+    response.status(500).json({ message: "An error occurred" });
   }
 })
 

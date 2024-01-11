@@ -1,10 +1,12 @@
 <template>
   <div>
     <h1>Add to Group</h1>
-    <select>
-      <option v-for="group in groups" :key="group.id">{{ group.name }}</option>
+    <select v-model="selectedGroupId">
+      <option v-for="group in groups" :key="group._id" :value="group._id">
+        {{ group.nom }}
+      </option>
     </select>
-    <button>Add</button>
+    <button @click="addToGroup">Add</button>
   </div>
 </template>
 
@@ -14,15 +16,32 @@ export default {
   name: 'AddToGroupComponent',
   data() {
     return {
-      groups: [] // Données des groupes
+      groups: [],
+      selectedGroupId: null
     }
   },
   mounted() {
-    // requête pour charger les groupes
-    axios.get('url_pour_charger_les_groupes')
+    axios.get('http://localhost:3000/groups')
       .then(response => {
         this.groups = response.data;
       });
+  },
+  methods: {
+    addToGroup() {
+      if (this.selectedGroupId) {
+        console.log(this.selectedGroupId)
+        console.log(localStorage.getItem('isAuthenticated'))
+        axios.post(`http://localhost:3000/addMemberToGroup/${this.selectedGroupId}`, { memberId: localStorage.getItem('isAuthenticated') })
+        .then(response => {
+          this.groups = response.data;
+        })
+        .catch(error => {
+          console.log(error)
+        });
+      }  else {
+        console.error("No group selected");
+      }
+    }
   }
 }
 </script>

@@ -13,7 +13,7 @@
     name: 'GroupMembersComponent',
     data() {
       return {
-        members: [] // Ici, les membres du groupe sélectionné sont affichés.
+        members: []
       }
     }
   }

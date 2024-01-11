@@ -2,16 +2,18 @@
     <div>
       <button @click="logout">Déconnexion</button>
       <add-to-group-component v-if="!isMember"></add-to-group-component>
-      <create-member-component></create-member-component>
+      <h2 v-else>Vous êtes dans le groupe {{ isMember.nom }} numéro {{ isMember.numero }}.</h2>
       <show-member-component></show-member-component>
       <button @click="$router.push('/create-group')">Créer un Groupe</button>
+
+      <search-orders-component></search-orders-component>
     </div>
   </template>
   
   <script>
   import AddToGroupComponent from '../components/AddToGroupComponent.vue';
-  import CreateMemberComponent from '../components/CreateMemberComponent.vue';
   import ShowMemberComponent from '../components/ShowMemberComponent.vue';
+  import SearchOrdersComponent from '../components/SearchOrdersComponent.vue';
   import axios from 'axios';
 
   export default {
@@ -22,8 +24,8 @@
     },
     components: {
       AddToGroupComponent,
-      CreateMemberComponent,
-      ShowMemberComponent
+      ShowMemberComponent,
+      SearchOrdersComponent
     },
     methods: {
     logout() {
@@ -34,7 +36,7 @@
     }
   },
   created() {
-    axios.get(`http://127.0.0.1:3000/memberBelongGroup/${localStorage.getItem('isAuthenticated')}}`).then(response => {
+    axios.get(`http://127.0.0.1:3000/memberBelongGroup/${localStorage.getItem('isAuthenticated')}`).then(response => {
         if (response.data) {
             this.isMember = response.data
         } else {
