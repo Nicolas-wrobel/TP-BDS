@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Add to Group</h1>
+    <h2>Add to Group</h2>
     <select v-model="selectedGroupId">
       <option v-for="group in groups" :key="group._id" :value="group._id">
         {{ group.nom }}

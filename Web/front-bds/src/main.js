@@ -5,11 +5,13 @@ import HomePage from './pages/HomePage.vue';
 import LoginPage from './pages/LoginPage.vue';
 import SignupPage from './pages/SignupPage.vue';
 import CreateGroupPage from './pages/CreateGroupPage.vue';
+import CreateMaterialPage from './pages/CreateMaterialPage.vue';
 
 const routes = [
   { path: '/login', component: LoginPage },
   { path: '/signup', component: SignupPage },
   { path: '/create-group', component: CreateGroupPage },
+  { path: '/create-material', component: CreateMaterialPage },
   { path: '/', component: HomePage },
 ];
 

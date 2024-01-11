@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>Group Members</h1>
+      <h2>Group Members</h2>
       <ul>
         <li v-for="member in members" :key="member.id">{{ member.name }}</li>
       </ul>
