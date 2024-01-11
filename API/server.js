@@ -93,6 +93,7 @@ app.get("/login/:name/:pwd", (request, response) => {
         }
     })
 })
+
 app.post("/addMemberToGroup/:id", async (request, response) => {
   try {
     const groupId = request.params.id;
@@ -137,13 +138,33 @@ app.post("/material", (request, response) => {
   materialToSave.save().then(response.json("Material added"));
 })
 
+app.get("/materials", (request, response) => {
+  Materiel.find().then((materials) => {
+    response.json(materials);
+    })
+})
+
+app.post("/order", async (request, response) => {
+  const memberId = request.body.idMembreActif;
+  const member = await Membre.findById(memberId);
+    if (!member) {
+      return response.status(404).json({ message: "Member not found" });
+    }
+  const commande = {
+    "NomMembreClient" : request.body.NomMembreClient,
+    "NomMembreActif" : member.nom,
+    "date" : request.body.date,
+    "ListeMateriel" : request.body.ListeMateriel,
+    "prix" : request.body.prix
+  };
+  const OrderToSave = new Commande(commande);
+  OrderToSave.save().then(response.json("Order created"));
+})
+
+
 app.get("/memberBelongGroup/:id", async (request, response) => {
   try {
-
     const memberId = request.params.id;
-    if (!mongoose.Types.ObjectId.isValid(memberId)) {
-      return response.status(400).json({ message: "Invalid member ID" });
-    }
 
     const isMemberInGroup = await Groupe.findOne({ membre: memberId });
     if (isMemberInGroup) {
@@ -152,8 +173,7 @@ app.get("/memberBelongGroup/:id", async (request, response) => {
       response.json(false);
     }
   } catch (error) {
-    console.error(error);
-    response.status(500).json({ message: "An error occurred" });
+    response.status(500).send("Erreur lors de la vérification de l'appartenance du membre");
   }
 })
 
