@@ -122,7 +122,7 @@ app.post("/material", (request, response) => {
 
 app.get("/memberBelongGroup/:id", async (request, response) => {
   try {
-    const memberId = req.params.id;
+    const memberId = request.params.id;
 
     const isMemberInGroup = await Groupe.findOne({ membre: memberId });
     if (isMemberInGroup) {
@@ -134,6 +134,34 @@ app.get("/memberBelongGroup/:id", async (request, response) => {
     response.status(500).send("Erreur lors de la vérification de l'appartenance du membre");
   }
 })
+
+app.get('/recherche/date/:dateDebut/:dateFin', (request, response) => {
+  Commande.find({
+      date: { $gte: new Date(request.params.dateDebut), $lte: new Date(request.params.dateFin) }
+  })
+  .then(commandes => response.json(commandes))
+  .catch(err => response.status(500).json(err));
+});
+
+app.get('/recherche/membreActifParNom/:nom', (request, response) => {
+  Commande.find({ NomMembreActif: new RegExp(request.params.nom, 'i') })
+  .then(membres => response.json(membres))
+  .catch(err => response.status(500).json(err));
+});
+
+app.get('/recherche/membreClientParNom/:nom', (request, response) => {
+  Commande.find({ NomMembreClient: new RegExp(request.params.nom, 'i') })
+  .then(membres => response.json(membres))
+  .catch(err => response.status(500).json(err));
+});
+
+app.get('/recherche/materielParNom/:nom', (request, response) => {
+  Materiel.find({ nom: new RegExp(request.params.nom, 'i') })
+  .then(materiels => response.json(materiels))
+  .catch(err => response.status(500).json(err));
+});
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
