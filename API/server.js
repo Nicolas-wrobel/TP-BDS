@@ -198,7 +198,7 @@ app.get('/recherche/membreClientParNom/:nom', (request, response) => {
 });
 
 app.get('/recherche/materielParNom/:nom', (request, response) => {
-  Materiel.find({ model: new RegExp(request.params.nom, 'i') })
+  Materiel.find({ modele: new RegExp(request.params.nom, 'i') })
   .then(materiels => response.json(materiels))
   .catch(err => response.status(500).json(err));
 });
