@@ -2,7 +2,7 @@
 FROM node:16
 
 # Créer le répertoire de travail de l'application
-WORKDIR /usr/src/app
+WORKDIR /
 
 # Copier les fichiers 'package.json' et 'package-lock.json'
 COPY package*.json ./
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Lancer l'application
-CMD ["node", "app.js"]
+CMD ["node", "server.js"]
