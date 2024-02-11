@@ -22,7 +22,7 @@
     },
     methods: {
         login() {
-            axios.get(`http://127.0.0.1:3000/login/${this.username}/${this.password}`)
+            axios.get(`http://localhost:3000/login/${this.username}/${this.password}`)
             .then(response => {
             if (response.data) {
                 localStorage.setItem('isAuthenticated', response.data._id);

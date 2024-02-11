@@ -33,7 +33,7 @@
           membre: []
         };
   
-        axios.post('http://127.0.0.1:3000/group', groupData)
+        axios.post('http://localhost:3000/group', groupData)
           .then(() => {
             this.$router.push('/');
           })

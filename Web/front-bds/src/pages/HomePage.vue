@@ -39,7 +39,7 @@
     }
   },
   created() {
-    axios.get(`http://127.0.0.1:3000/memberBelongGroup/${localStorage.getItem('isAuthenticated')}`).then(response => {
+    axios.get(`http://localhost:3000/memberBelongGroup/${localStorage.getItem('isAuthenticated')}`).then(response => {
         if (response.data) {
             this.isMember = response.data
         } else {

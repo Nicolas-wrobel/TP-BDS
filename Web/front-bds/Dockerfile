@@ -23,7 +23,7 @@ FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Exposer le port utilisé par Nginx
-EXPOSE 80
+EXPOSE 5173
 
 # Lancer Nginx
 CMD ["nginx", "-g", "daemon off;"]
